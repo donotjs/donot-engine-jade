@@ -7,16 +7,11 @@ smart-static-jade
 
 # Usage
 
-An example of how to use
-
-    var smartStatic = require('smart-static');
     var jade = require('smart-static-jade');
-    
-    // Setup smart-static
-    smartStatic(someDir);
-    
     smartStatic.engine(jade());
+
+> See [smart-static](http://github.com/trenskow/smart-static.js) for more information.
 
 # Todo
 
-* Support for options.
+Options support.
