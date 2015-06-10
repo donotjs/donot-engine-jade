@@ -1,0 +1,22 @@
+{
+  "name": "smart-static-jade",
+  "version": "0.1.0",
+  "description": "JADE template support for smart-static.",
+  "author": "Kristian Trenskow <trenskow@me.com>",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trenskow/smart-static-jade.js"
+  },
+  "dependencies": {
+    "jade": "^1.10.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5",
+    "chai": "^3.0.0"
+  },
+  "scripts": {
+    "test": "mocha test/*"
+  },
+  "license": "MIT"
+}
