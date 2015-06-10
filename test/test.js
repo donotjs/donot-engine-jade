@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var expect = require('chai').expect;
-var engine = require('../');
+var engine = require('../')();
 
 var testFile = path.normalize(__dirname + '/data/test.jade');
 var malformedFile = path.normalize(__dirname + '/data/malformed.jade');
