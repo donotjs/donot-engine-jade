@@ -18,14 +18,14 @@ describe('jade', function() {
   describe('compiler', function() {
 
     it ('should return error on malformed jade', function(done) {
-      engine.compile(malformedFile, malformed, 'utf8', function(err, data) {
+      engine.compile(malformedFile, malformed, {}, function(err, data) {
         expect(err).to.be.instanceof(Error);
         done();
       });
     });
 
     it ('should return valid javascript on valid jade', function(done) {
-      engine.compile(testFile, test, 'utf8', function(err, data) {
+      engine.compile(testFile, test, {}, function(err, data) {
         expect(err).to.be.null;
         expect(data).to.be.a('string');
         expect(function() {
@@ -41,11 +41,11 @@ describe('jade', function() {
   describe('renderer', function() {
 
     it ('should render html from compiled jade', function(done) {
-      engine.compile(testFile, test, 'utf8', function(err, data, files) {
+      engine.compile(testFile, test, {}, function(err, data, files) {
         expect(err).to.be.null;
         expect(data).to.be.a('string');
         expect(files).to.deep.equal([testFile]);
-        engine.render(null, data, 'utf8', function(err, data) {
+        engine.render(null, data, {}, function(err, data) {
           expect(err).to.be.null;
           expect(data).to.be.equal('<h1>this is jade</h1>');
           done();
