@@ -5,9 +5,6 @@ exports = module.exports = function(opt) {
 
   var options = merge(true, opt || {});
 
-  // Set default dummy render callback
-  options.renderCallback = options.renderCallback || function() {};
-
   return {
     map: {
       '.html': '.jade',
@@ -27,7 +24,9 @@ exports = module.exports = function(opt) {
       var source;
       try {
         var fn = new Function('return ' + data);
-        source = fn()(options.renderCallback(opt.ctx));
+        var locals = opt.ctx;
+        if (options.renderCallback) locals = options.renderCallback(opt.ctx);
+        source = fn()(locals);
       } catch (err) {
         return cb(err);
       }
