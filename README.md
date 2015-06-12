@@ -1,5 +1,5 @@
 smart-static-jade
-==============
+=================
 
 [Jade](http://npmjs.org/packages/jade) support for [smart-static](http://github.com/trenskow/smart-static.js).
 
