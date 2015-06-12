@@ -14,7 +14,7 @@ exports = module.exports = function(opt) {
     compile: function(file, data, opt, cb) {
       var fn;
       try {
-        fn = jade.compileClientWithDependenciesTracked(data, { filename: file });
+        fn = jade.compileClientWithDependenciesTracked(data, { filename: file, cache: false });
       } catch (err) {
         return cb(err);
       }
