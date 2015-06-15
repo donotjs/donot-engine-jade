@@ -24,7 +24,7 @@ describe('jade', function() {
       });
     });
 
-    it ('should return valid javascript on valid jade', function(done) {
+    it ('should return compiled jade', function(done) {
       engine.compile(testFile, test, {}, function(err, data) {
         expect(err).to.be.null;
         expect(data).to.be.a('string');
