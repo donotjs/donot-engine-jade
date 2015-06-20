@@ -1,6 +1,8 @@
 smart-static-jade
 =================
 
+[![Build Status](https://travis-ci.org/trenskow/smart-static-jade.svg?branch=master)](https://travis-ci.org/trenskow/smart-static-jade)
+
 [Jade](http://npmjs.org/packages/jade) rendering engine for [smart-static](http://github.com/trenskow/smart-static.js).
 
 # Usage
