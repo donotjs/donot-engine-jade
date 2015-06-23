@@ -3,7 +3,7 @@ smart-static-jade
 
 [![Build Status](https://travis-ci.org/trenskow/smart-static-jade.svg?branch=master)](https://travis-ci.org/trenskow/smart-static-jade)
 
-[Jade](http://npmjs.org/packages/jade) rendering engine for [smart-static](http://github.com/trenskow/smart-static.js).
+[Jade](http://npmjs.org/packages/jade) rendering engine for [smart-static](http://github.com/trenskow/smart-static).
 
 # Usage
 
@@ -56,3 +56,7 @@ An example on how to use this below (here with Express).
     }));
 
 In the above example the `renderCallback` is called whenever Jade is rendering a template. The `app.get('/index.html'...` route sets the `req.options` - which is then returned for Jade to use in the callback.
+
+# License
+
+MIT
