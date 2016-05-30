@@ -1,3 +1,5 @@
+'use strict';
+
 var merge = require('merge');
 var jade = require('jade');
 
