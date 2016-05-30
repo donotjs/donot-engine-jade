@@ -13,7 +13,7 @@ Using the Jade donot engine plug-in is pretty easy.
 	    donot = require('donot'),
 	    jade = require('donot-engine-jade');
 
-    var server = http.createServer(donot({
+    var server = http.createServer(donot(__dirname + '/public', {
 			engines: [
 				jade({
 					// Options
@@ -44,7 +44,7 @@ An example on how to use this below (here with Express).
 			next();
 		});
 
-		app.use(donot({
+		app.use(donot(__dirname + '/public', {
 			engines: [
 				jade({
 					renderCallback: function(req) {
