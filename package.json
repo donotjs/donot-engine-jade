@@ -1,7 +1,7 @@
 {
-  "name": "smart-static-jade",
-  "version": "1.0.2",
-  "description": "JADE template support for smart-static.",
+  "name": "@donotjs/donot-transform-jade",
+  "version": "1.0.0",
+  "description": "JADE template support for donot.",
   "author": "Kristian Trenskow <trenskow@me.com>",
   "main": "index.js",
   "repository": {
@@ -9,12 +9,14 @@
     "url": "https://github.com/donotjs/smart-static-jade"
   },
   "dependencies": {
+    "@donotjs/donot-transform": "^1.0.0",
     "jade": "^1.10.0",
     "merge": "^1.2.0"
   },
   "devDependencies": {
-    "mocha": "^2.2.5",
-    "chai": "^3.0.0"
+    "chai": "^3.0.0",
+    "chai-as-promised": "^5.3.0",
+    "mocha": "^2.2.5"
   },
   "scripts": {
     "test": "mocha test/*"

@@ -1,24 +1,22 @@
-donot-engine-jade
-=================
+donot-transform-jade
+====================
 
-[![Build Status](https://travis-ci.org/donotjs/donot-engine-jade.svg?branch=master)](https://travis-ci.org/donotjs/donot-engine-jade)
+[![Build Status](https://travis-ci.org/donotjs/donot-transform-jade.svg?branch=master)](https://travis-ci.org/donotjs/donot-transform-jade)
 
-[Jade](http://npmjs.org/packages/jade) rendering engine for [donot](http://github.com/donotjs/donot-engine-jade).
+[Jade](http://npmjs.org/packages/jade) compiler and renderer for [donot](http://github.com/donotjs/donot-transform-jade).
 
 # Usage
 
-Using the Jade donot engine plug-in is pretty easy.
+Using the Jade donot transform plug-in is pretty easy.
 
 	var http = require('http'),
 	    donot = require('donot'),
-	    jade = require('donot-engine-jade');
+	    JadeTransform = require('donot-transform-jade');
 
     var server = http.createServer(donot(__dirname + '/public', {
-			engines: [
-				jade({
-					// Options
-				})
-			]
+			transforms: [ new JadeTransform(({
+				// Options
+			}) ]
 		}));
 
 		server.listen(8000);
@@ -33,7 +31,7 @@ An example on how to use this below (here with Express).
 
     var express = require('express'),
 		    donot = require('donot'),
-		    jade = require('donot-engine-jade');
+		    jade = require('donot-transform-jade');
 
 		var app = express();
 
@@ -45,13 +43,11 @@ An example on how to use this below (here with Express).
 		});
 
 		app.use(donot(__dirname + '/public', {
-			engines: [
-				jade({
-					renderCallback: function(req) {
-						return req.options;
-					}
-				})
-			]
+			transforms: [ new JadeTransform({
+				renderCallback: function(req) {
+					return req.options;
+				}
+			}) ]
 		}));
 
 In the above example the `renderCallback` is called whenever Jade is rendering a template. The `app.get('/index.html'...` route sets the `req.options` - which is then returned for Jade to use in the callback.

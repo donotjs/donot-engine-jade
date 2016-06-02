@@ -2,61 +2,74 @@
 
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var expect = require('chai').expect;
-var engine = require('../')();
+const fs = require('fs');
+const path = require('path');
+const chai = require('chai');
+const expect = chai.expect;
+const chaiAsPromised = require('chai-as-promised');
+const JadeTransform = require('../');
 
-var testFile = path.normalize(__dirname + '/data/test.jade');
-var malformedFile = path.normalize(__dirname + '/data/malformed.jade');
+chai.should();
+chai.use(chaiAsPromised);
 
-describe('jade', function() {
+const testFile = path.normalize(__dirname + '/data/test.jade');
+const malformedFile = path.normalize(__dirname + '/data/malformed.jade');
 
-  var test;
-  var malformed;
-  before(function() {
-    test = fs.readFileSync(testFile, { encoding: 'utf8' });
-    malformed = fs.readFileSync(malformedFile, { encoding: 'utf8' });
-  });
+var transform = new JadeTransform();
 
-  describe('compiler', function() {
+describe('jade', () => {
 
-    it ('should return error on malformed jade', function(done) {
-      engine.compile(malformedFile, malformed, {}, function(err, data) {
-        expect(err).to.be.instanceof(Error);
-        done();
-      });
-    });
+	var test;
+	var malformed;
+	var compiled;
+	before(() => {
+		test = fs.readFileSync(testFile, { encoding: 'utf8' });
+		malformed = fs.readFileSync(malformedFile, { encoding: 'utf8' });
+	});
 
-    it ('should return compiled jade', function(done) {
-      engine.compile(testFile, test, {}, function(err, data) {
-        expect(err).to.be.null;
-        expect(data).to.be.a('string');
-        expect(function() {
-          var fn = new Function('return ' + data);
-          fn()();
-        }).not.to.throw(Error);
-        done();
-      });
-    });
+	describe('compiler', () => {
 
-  });
+		it ('should return true when filename is .html', () => {
+			transform.canTransform('my.html').should.eventually.be.true;
+		});
 
-  describe('renderer', function() {
+		it ('should return false when filename is .jade', () => {
+			transform.canTransform('my.jade').should.eventually.be.false;
+		});
 
-    it ('should render html from compiled jade', function(done) {
-      engine.compile(testFile, test, {}, function(err, data, files) {
-        expect(err).to.be.null;
-        expect(data).to.be.a('string');
-        expect(files).to.deep.equal([testFile]);
-        engine.render(null, data, {}, function(err, data) {
-          expect(err).to.be.null;
-          expect(data).to.be.equal('<h1>this is jade</h1>');
-          done();
-        });
-      });
-    });
+		it ('should return true when filename is .jade', () => {
+			transform.allowAccess('my.jade').should.eventually.be.true;
+		});
 
-  });
+		it ('should return false when filename is .htm', () => {
+			transform.allowAccess('my.htm').should.eventually.be.false;
+		});
+
+		it ('should return error on malformed jade', () => {
+			transform.compile(malformedFile, malformed).should.eventually.be.rejected;
+		});
+
+		it ('should return compiled jade', () => {
+			transform.compile(testFile, test).then((data) => {
+				expect(data).to.be.a('string');
+				expect(() => {
+					var fn = new Function('return ' + data);
+					fn()();
+				}).not.to.throw(Error);
+				compiled = data;
+			}).should.eventually.be.fulfilled;
+		});
+
+	});
+
+	describe('renderer', () => {
+
+		it ('should render html from compiled jade', () => {
+			transform.render(null, compiled).then((data) => {
+				expect(data).to.be.equal('<h1>this is jade</h1>');
+			}).should.eventually.be.fulfilled;
+		});
+
+	});
 
 });
