@@ -14,7 +14,7 @@ Using the Jade donot transform plug-in is pretty easy.
 	    JadeTransform = require('donot-transform-jade');
 
     var server = http.createServer(donot(__dirname + '/public', {
-			transforms: [ new JadeTransform(({
+			transforms: [ new JadeTransform({
 				// Options
 			}) ]
 		}));

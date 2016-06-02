@@ -13,15 +13,15 @@ class JadeTransform extends Transform {
 	}
 
 	canTransform(filename) {
-		return Promise.resolve(/\.(html|htm)$/i.test(filename));
+		return /\.(html|htm)$/i.test(filename);
 	}
 
 	allowAccess(filename) {
-		return Promise.resolve(!/\.jade$/i.test(filename));
+		return !/\.jade$/i.test(filename);
 	}
 
 	map(filename) {
-		return Promise.resolve(filename.replace(/\.(html|htm)$/i, '.jade'));
+		return filename.replace(/\.(html|htm)$/i, '.jade');
 	}
 
 	compile(filename, data, options) {

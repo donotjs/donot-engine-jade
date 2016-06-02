@@ -30,19 +30,19 @@ describe('jade', () => {
 	describe('compiler', () => {
 
 		it ('should return true when filename is .html', () => {
-			return transform.canTransform('my.html').should.eventually.be.true;
+			expect(transform.canTransform('my.html')).to.be.true;
 		});
 
 		it ('should return false when filename is .jade', () => {
-			return transform.canTransform('my.jade').should.eventually.be.false;
+			expect(transform.canTransform('my.jade')).to.be.false;
 		});
 
 		it ('should return false when filename is .jade', () => {
-			return transform.allowAccess('my.jade').should.eventually.be.false;
+			expect(transform.allowAccess('my.jade')).to.be.false;
 		});
 
 		it ('should return true when filename is .htm', () => {
-			return transform.allowAccess('my.htm').should.eventually.be.true;
+			expect(transform.allowAccess('my.htm')).to.be.true;
 		});
 
 		it ('should return error on malformed jade', () => {
