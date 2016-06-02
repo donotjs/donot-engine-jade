@@ -30,33 +30,35 @@ describe('jade', () => {
 	describe('compiler', () => {
 
 		it ('should return true when filename is .html', () => {
-			transform.canTransform('my.html').should.eventually.be.true;
+			return transform.canTransform('my.html').should.eventually.be.true;
 		});
 
 		it ('should return false when filename is .jade', () => {
-			transform.canTransform('my.jade').should.eventually.be.false;
+			return transform.canTransform('my.jade').should.eventually.be.false;
 		});
 
-		it ('should return true when filename is .jade', () => {
-			transform.allowAccess('my.jade').should.eventually.be.true;
+		it ('should return false when filename is .jade', () => {
+			return transform.allowAccess('my.jade').should.eventually.be.false;
 		});
 
-		it ('should return false when filename is .htm', () => {
-			transform.allowAccess('my.htm').should.eventually.be.false;
+		it ('should return true when filename is .htm', () => {
+			return transform.allowAccess('my.htm').should.eventually.be.true;
 		});
 
 		it ('should return error on malformed jade', () => {
-			transform.compile(malformedFile, malformed).should.eventually.be.rejected;
+			return transform.compile(malformedFile, malformed).should.eventually.be.rejected;
 		});
 
 		it ('should return compiled jade', () => {
-			transform.compile(testFile, test).then((data) => {
-				expect(data).to.be.a('string');
+			return transform.compile(testFile, test).then((result) => {
+				expect(result.data).to.be.a('string');
 				expect(() => {
-					var fn = new Function('return ' + data);
+					var fn = new Function('return ' + result.data);
 					fn()();
 				}).not.to.throw(Error);
-				compiled = data;
+				compiled = result.data;
+				expect(result.files).to.be.an.array;
+				expect(result.files[0]).to.be.a('string');
 			}).should.eventually.be.fulfilled;
 		});
 
@@ -65,8 +67,8 @@ describe('jade', () => {
 	describe('renderer', () => {
 
 		it ('should render html from compiled jade', () => {
-			transform.render(null, compiled).then((data) => {
-				expect(data).to.be.equal('<h1>this is jade</h1>');
+			return transform.render(null, compiled).then((result) => {
+				expect(result.data).to.be.equal('<h1>this is jade</h1>');
 			}).should.eventually.be.fulfilled;
 		});
 

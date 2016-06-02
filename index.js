@@ -36,8 +36,8 @@ class JadeTransform extends Transform {
 
 	render(filename, data, options) {
 		return new Promise((resolved, rejected) => {
-			var locals = options.ctx;
-			if (this.options.renderCallback) locals = this.options.renderCallback(options.ctx);
+			var locals = (options || {}).ctx;
+			if (this.options.renderCallback) locals = this.options.renderCallback(locals);
 			resolved({
 				data: new Function('return ' + data)()(locals)
 			});
