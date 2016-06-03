@@ -13,13 +13,13 @@ Using the Jade donot transform plug-in is pretty easy.
 	    donot = require('donot'),
 	    JadeTransform = require('donot-transform-jade');
 
-    var server = http.createServer(donot(__dirname + '/public', {
-			transforms: [ new JadeTransform({
-				// Options
-			}) ]
-		}));
+	var server = http.createServer(donot(__dirname + '/public', {
+		transforms: [ new JadeTransform({
+			// Options
+		}) ]
+	}));
 
-		server.listen(8000);
+	server.listen(8000);
 
 Now `.jade` files in the `/public` folder will automatically be compiled, rendered and served as `.html` files.
 
