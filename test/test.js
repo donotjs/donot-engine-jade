@@ -4,6 +4,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const chai = require('chai');
 const expect = chai.expect;
 const chaiAsPromised = require('chai-as-promised');
@@ -17,12 +18,17 @@ const malformedFile = path.normalize(__dirname + '/data/malformed.jade');
 
 var transform = new JadeTransform();
 
+var destFilename = path.normalize(os.tmpdir() + '/testdonotjade');
+
 describe('jade', () => {
 
 	var test;
 	var malformed;
 	var compiled;
 	before(() => {
+		if (fs.existsSync(destFilename)) {
+			fs.unlinkSync(destFilename);
+		}
 		test = fs.readFileSync(testFile, { encoding: 'utf8' });
 		malformed = fs.readFileSync(malformedFile, { encoding: 'utf8' });
 	});
@@ -46,17 +52,12 @@ describe('jade', () => {
 		});
 
 		it ('should return error on malformed jade', () => {
-			return transform.compile(malformedFile, malformed).should.eventually.be.rejected;
+			return transform.compile(malformedFile, destFilename).should.eventually.be.rejected;
 		});
 
 		it ('should return compiled jade', () => {
-			return transform.compile(testFile, test).then((result) => {
-				expect(result.data).to.be.a('string');
-				expect(() => {
-					var fn = new Function('return ' + result.data);
-					fn()();
-				}).not.to.throw(Error);
-				compiled = result.data;
+			return transform.compile(testFile, destFilename).then((result) => {
+				expect(fs.existsSync(destFilename)).to.be.true;
 				expect(result.files).to.be.an.array;
 				expect(result.files[0]).to.be.a('string');
 			}).should.eventually.be.fulfilled;
@@ -67,8 +68,14 @@ describe('jade', () => {
 	describe('renderer', () => {
 
 		it ('should render html from compiled jade', () => {
-			return transform.render(null, compiled).then((result) => {
-				expect(result.data).to.be.equal('<h1>this is jade</h1>');
+			return new Promise((resolved, rejected) => {
+				fs.readFile(destFilename, 'utf8', (err, data) => {
+					if (err) return rejected(err);
+					transform.render(data).then((result) => {
+						expect(result.data).to.be.equal('<h1>this is jade</h1>');
+						resolved(result.data);
+					}, rejected);
+				});
 			}).should.eventually.be.fulfilled;
 		});
 

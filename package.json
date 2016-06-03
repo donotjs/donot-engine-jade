@@ -9,7 +9,7 @@
     "url": "https://github.com/donotjs/donot-transform-jade"
   },
   "dependencies": {
-    "@donotjs/donot-transform": "^1.0.0",
+    "@donotjs/donot-transform": "^1.0.5",
     "jade": "^1.10.0",
     "merge": "^1.2.0"
   },

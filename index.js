@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const merge = require('merge');
 const jade = require('jade');
 
@@ -24,22 +25,36 @@ class JadeTransform extends Transform {
 		return filename.replace(/\.(html|htm)$/i, '.jade');
 	}
 
-	compile(filename, data, options) {
+	compile(srcFilename, destFilename, options) {
 		return new Promise((resolved, rejected) => {
-			var fn = jade.compileClientWithDependenciesTracked(data, { filename: filename, cache: false });
-			resolved({
-				data: fn.body,
-				files: [filename].concat(fn.dependencies)
+			fs.readFile(srcFilename, 'utf8', (err, data) => {
+				if (err) return rejected(err);
+				var fn;
+				try {
+					fn = jade.compileClientWithDependenciesTracked(data, {filename: srcFilename, cache: false });
+				} catch(err) {
+					return rejected(err);
+				}
+				fs.writeFile(destFilename, fn.body, 'utf8', (err) => {
+					if (err) return rejected(err);
+					resolved({
+						files: [srcFilename].concat(fn.dependencies)
+					});
+				});
 			});
 		});
 	}
 
-	render(filename, data, options) {
+	needsRendering(options) {
+		return true;
+	}
+
+	render(compiledData, options) {
 		return new Promise((resolved, rejected) => {
 			var locals = (options || {}).ctx;
 			if (this.options.renderCallback) locals = this.options.renderCallback(locals);
 			resolved({
-				data: new Function('return ' + data)()(locals)
+				data: new Function('return ' + compiledData)()(locals)
 			});
 		});
 	}
