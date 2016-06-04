@@ -30,25 +30,25 @@ Providing locals for pug renderings is possible using the `renderCallback` optio
 An example on how to use this below (here with Express).
 
     var express = require('express'),
-		    donot = require('donot'),
-		    PugTransform = require('donot-transform-pug');
+	    donot = require('donot'),
+	    PugTransform = require('donot-transform-pug');
 
-		var app = express();
+	var app = express();
 
-		app.get('/index.html', function(req, res, next) {
-			req.options = {
-				// pug locals
-			};
-			next();
-		});
+	app.get('/index.html', function(req, res, next) {
+		req.options = {
+			// pug locals
+		};
+		next();
+	});
 
-		app.use(donot(__dirname + '/public', {
-			transforms: [ new PugTransform({
-				renderCallback: function(req) {
-					return req.options;
-				}
-			}) ]
-		}));
+	app.use(donot(__dirname + '/public', {
+		transforms: [ new PugTransform({
+			renderCallback: function(req) {
+				return req.options;
+			}
+		}) ]
+	}));
 
 In the above example the `renderCallback` is called whenever pug is rendering a template. The `app.get('/index.html'...` route sets the `req.options` - which is then returned for pug to use in the callback.
 
