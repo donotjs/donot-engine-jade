@@ -1,17 +1,17 @@
 {
-  "name": "@donotjs/donot-transform-jade",
+  "name": "@donotjs/donot-transform-pug",
   "version": "1.0.0",
-  "description": "JADE template support for donot.",
+  "description": "pug template support for donot.",
   "author": "Kristian Trenskow <trenskow@me.com>",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/donotjs/donot-transform-jade"
+    "url": "https://github.com/donotjs/donot-transform-pug"
   },
   "dependencies": {
     "@donotjs/donot-transform": "^1.0.5",
-    "jade": "^1.10.0",
-    "merge": "^1.2.0"
+    "merge": "^1.2.0",
+    "pug": "^2.0.0-beta2"
   },
   "devDependencies": {
     "chai": "^3.0.0",

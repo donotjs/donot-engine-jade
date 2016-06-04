@@ -2,11 +2,11 @@
 
 const fs = require('fs');
 const merge = require('merge');
-const jade = require('jade');
+const pug = require('pug');
 
 const Transform = require('@donotjs/donot-transform');
 
-class JadeTransform extends Transform {
+class PugTransform extends Transform {
 
 	constructor(options) {
 		super();
@@ -18,11 +18,11 @@ class JadeTransform extends Transform {
 	}
 
 	allowAccess(filename) {
-		return !/\.jade$/i.test(filename);
+		return !/\.pug$/i.test(filename);
 	}
 
 	map(filename) {
-		return filename.replace(/\.(html|htm)$/i, '.jade');
+		return filename.replace(/\.(html|htm)$/i, '.pug');
 	}
 
 	compile(srcFilename, destFilename, options) {
@@ -31,7 +31,7 @@ class JadeTransform extends Transform {
 				if (err) return rejected(err);
 				var fn;
 				try {
-					fn = jade.compileClientWithDependenciesTracked(data, {filename: srcFilename, cache: false });
+					fn = pug.compileClientWithDependenciesTracked(data, {filename: srcFilename, cache: false });
 				} catch(err) {
 					return rejected(err);
 				}
@@ -54,11 +54,11 @@ class JadeTransform extends Transform {
 			var locals = (options || {}).ctx;
 			if (this.options.renderCallback) locals = this.options.renderCallback(locals);
 			resolved({
-				data: new Function('return ' + compiledData)()(locals)
+				data: new Function('return function() {' + compiledData + ' return template;}')()()(locals)
 			});
 		});
 	}
 
 }
 
-exports = module.exports = JadeTransform;
+exports = module.exports = PugTransform;

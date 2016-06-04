@@ -8,19 +8,19 @@ const os = require('os');
 const chai = require('chai');
 const expect = chai.expect;
 const chaiAsPromised = require('chai-as-promised');
-const JadeTransform = require('../');
+const PugTransform = require('../');
 
 chai.should();
 chai.use(chaiAsPromised);
 
-const testFile = path.normalize(__dirname + '/data/test.jade');
-const malformedFile = path.normalize(__dirname + '/data/malformed.jade');
+const testFile = path.normalize(__dirname + '/data/test.pug');
+const malformedFile = path.normalize(__dirname + '/data/malformed.pug');
 
-var transform = new JadeTransform();
+var transform = new PugTransform();
 
-var destFilename = path.normalize(os.tmpdir() + '/testdonotjade');
+var destFilename = path.normalize(os.tmpdir() + '/testdonotpug');
 
-describe('jade', () => {
+describe('pug', () => {
 
 	var test;
 	var malformed;
@@ -39,23 +39,23 @@ describe('jade', () => {
 			expect(transform.canTransform('my.html')).to.be.true;
 		});
 
-		it ('should return false when filename is .jade', () => {
-			expect(transform.canTransform('my.jade')).to.be.false;
+		it ('should return false when filename is .pug', () => {
+			expect(transform.canTransform('my.pug')).to.be.false;
 		});
 
-		it ('should return false when filename is .jade', () => {
-			expect(transform.allowAccess('my.jade')).to.be.false;
+		it ('should return false when filename is .pug', () => {
+			expect(transform.allowAccess('my.pug')).to.be.false;
 		});
 
 		it ('should return true when filename is .htm', () => {
 			expect(transform.allowAccess('my.htm')).to.be.true;
 		});
 
-		it ('should return error on malformed jade', () => {
+		it ('should return error on malformed pug', () => {
 			return transform.compile(malformedFile, destFilename).should.eventually.be.rejected;
 		});
 
-		it ('should return compiled jade', () => {
+		it ('should return compiled pug', () => {
 			return transform.compile(testFile, destFilename).then((result) => {
 				expect(fs.existsSync(destFilename)).to.be.true;
 				expect(result.files).to.be.an.array;
@@ -67,12 +67,12 @@ describe('jade', () => {
 
 	describe('renderer', () => {
 
-		it ('should render html from compiled jade', () => {
+		it ('should render html from compiled pug', () => {
 			return new Promise((resolved, rejected) => {
 				fs.readFile(destFilename, 'utf8', (err, data) => {
 					if (err) return rejected(err);
 					transform.render(data).then((result) => {
-						expect(result.data).to.be.equal('<h1>this is jade</h1>');
+						expect(result.data).to.be.equal('<h1>this is pug</h1>');
 						resolved(result.data);
 					}, rejected);
 				});
