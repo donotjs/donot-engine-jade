@@ -14,7 +14,7 @@ class PugTransform extends Transform {
 	}
 
 	canTransform(filename) {
-		return /\.(html|htm)$/i.test(filename);
+		return /(?:\.min)?\.(html|htm)$/i.test(filename);
 	}
 
 	allowAccess(filename) {
@@ -22,7 +22,7 @@ class PugTransform extends Transform {
 	}
 
 	map(filename) {
-		return filename.replace(/\.(html|htm)$/i, '.pug');
+		return filename.replace(/(?:\.min)?\.(html|htm)$/i, '.pug');
 	}
 
 	compile(srcFilename, destFilename, options) {
@@ -31,7 +31,11 @@ class PugTransform extends Transform {
 				if (err) return rejected(err);
 				var fn;
 				try {
-					fn = pug.compileClientWithDependenciesTracked(data, {filename: srcFilename, cache: false });
+					fn = pug.compileClientWithDependenciesTracked(data, {
+						filename: srcFilename,
+						cache: false,
+						pretty: /\.min\.(html|html)$/i.test(destFilename)
+					});
 				} catch(err) {
 					return rejected(err);
 				}
