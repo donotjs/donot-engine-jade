@@ -18,17 +18,12 @@ const malformedFile = path.normalize(__dirname + '/data/malformed.pug');
 
 var transform = new PugTransform();
 
-var destFilename = path.normalize(os.tmpdir() + '/testdonotpug');
-
 describe('pug', () => {
 
 	var test;
 	var malformed;
 	var compiled;
 	before(() => {
-		if (fs.existsSync(destFilename)) {
-			fs.unlinkSync(destFilename);
-		}
 		test = fs.readFileSync(testFile, { encoding: 'utf8' });
 		malformed = fs.readFileSync(malformedFile, { encoding: 'utf8' });
 	});
@@ -52,14 +47,18 @@ describe('pug', () => {
 		});
 
 		it ('should return error on malformed pug', () => {
-			return transform.compile(malformedFile, destFilename).should.eventually.be.rejected;
+			return transform.compile(malformedFile, malformed).should.eventually.be.rejected;
 		});
 
 		it ('should return compiled pug', () => {
-			return transform.compile(testFile, destFilename).then((result) => {
-				expect(fs.existsSync(destFilename)).to.be.true;
+			return transform.compile(testFile, test).then((result) => {
+				expect(result).to.be.an('object');
+				expect(result).to.have.property('data');
+				expect(result).to.have.property('files');
+				expect(result.data).to.be.a('string');
 				expect(result.files).to.be.an.array;
 				expect(result.files[0]).to.be.a('string');
+				compiled = result.data;
 			}).should.eventually.be.fulfilled;
 		});
 
@@ -69,13 +68,11 @@ describe('pug', () => {
 
 		it ('should render html from compiled pug', () => {
 			return new Promise((resolved, rejected) => {
-				fs.readFile(destFilename, 'utf8', (err, data) => {
-					if (err) return rejected(err);
-					transform.render(data).then((result) => {
-						expect(result.data).to.be.equal('<h1>this is pug</h1>');
-						resolved(result.data);
-					}, rejected);
-				});
+				transform.render(compiled).then((result) => {
+					expect(result).to.have.property('data');
+					expect(result.data).to.be.equal('<h1>this is pug</h1>');
+					resolved(result.data);
+				}, rejected);
 			}).should.eventually.be.fulfilled;
 		});
 

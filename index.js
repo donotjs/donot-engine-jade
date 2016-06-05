@@ -25,26 +25,16 @@ class PugTransform extends Transform {
 		return filename.replace(/(?:\.min)?\.(html|htm)$/i, '.pug');
 	}
 
-	compile(srcFilename, destFilename, options) {
+	compile(filename, data) {
 		return new Promise((resolved, rejected) => {
-			fs.readFile(srcFilename, 'utf8', (err, data) => {
-				if (err) return rejected(err);
-				var fn;
-				try {
-					fn = pug.compileClientWithDependenciesTracked(data, {
-						filename: srcFilename,
-						cache: false,
-						pretty: /\.min\.(html|html)$/i.test(destFilename)
-					});
-				} catch(err) {
-					return rejected(err);
-				}
-				fs.writeFile(destFilename, fn.body, 'utf8', (err) => {
-					if (err) return rejected(err);
-					resolved({
-						files: [srcFilename].concat(fn.dependencies)
-					});
-				});
+			var fn = pug.compileClientWithDependenciesTracked(data, {
+				filename: filename,
+				cache: false,
+				pretty: /\.min\.(html|html)$/i.test(filename)
+			});
+			resolved({
+				data: fn.body,
+				files: [filename].concat(fn.dependencies)
 			});
 		});
 	}

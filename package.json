@@ -1,6 +1,6 @@
 {
   "name": "@donotjs/donot-transform-pug",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "pug template support for donot.",
   "author": "Kristian Trenskow <trenskow@me.com>",
   "main": "index.js",
