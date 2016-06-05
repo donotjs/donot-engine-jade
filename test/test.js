@@ -24,8 +24,8 @@ describe('pug', () => {
 	var malformed;
 	var compiled;
 	before(() => {
-		test = fs.readFileSync(testFile, { encoding: 'utf8' });
-		malformed = fs.readFileSync(malformedFile, { encoding: 'utf8' });
+		test = fs.readFileSync(testFile);
+		malformed = fs.readFileSync(malformedFile);
 	});
 
 	describe('compiler', () => {
@@ -55,7 +55,7 @@ describe('pug', () => {
 				expect(result).to.be.an('object');
 				expect(result).to.have.property('data');
 				expect(result).to.have.property('files');
-				expect(result.data).to.be.a('string');
+				expect(result.data.toString()).to.be.a('string');
 				expect(result.files).to.be.an.array;
 				expect(result.files[0]).to.be.a('string');
 				compiled = result.data;
@@ -70,8 +70,8 @@ describe('pug', () => {
 			return new Promise((resolved, rejected) => {
 				transform.render(compiled).then((result) => {
 					expect(result).to.have.property('data');
-					expect(result.data).to.be.equal('<h1>this is pug</h1>');
-					resolved(result.data);
+					expect(result.data.toString()).to.be.equal('<h1>this is pug</h1>');
+					resolved();
 				}, rejected);
 			}).should.eventually.be.fulfilled;
 		});

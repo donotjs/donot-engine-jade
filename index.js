@@ -27,13 +27,13 @@ class PugTransform extends Transform {
 
 	compile(filename, data) {
 		return new Promise((resolved, rejected) => {
-			var fn = pug.compileClientWithDependenciesTracked(data, {
+			var fn = pug.compileClientWithDependenciesTracked(data.toString(), {
 				filename: filename,
 				cache: false,
 				pretty: /\.min\.(html|html)$/i.test(filename)
 			});
 			resolved({
-				data: fn.body,
+				data: new Buffer(fn.body),
 				files: [filename].concat(fn.dependencies)
 			});
 		});
