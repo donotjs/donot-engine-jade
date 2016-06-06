@@ -55,24 +55,10 @@ describe('pug', () => {
 				expect(result).to.be.an('object');
 				expect(result).to.have.property('data');
 				expect(result).to.have.property('files');
-				expect(result.data.toString()).to.be.a('string');
+				expect(result.data.toString()).to.be.equal('<h1>this is pug</h1>');
 				expect(result.files).to.be.an.array;
 				expect(result.files[0]).to.be.a('string');
 				compiled = result.data;
-			}).should.eventually.be.fulfilled;
-		});
-
-	});
-
-	describe('renderer', () => {
-
-		it ('should render html from compiled pug', () => {
-			return new Promise((resolved, rejected) => {
-				transform.render(compiled).then((result) => {
-					expect(result).to.have.property('data');
-					expect(result.data.toString()).to.be.equal('<h1>this is pug</h1>');
-					resolved();
-				}, rejected);
 			}).should.eventually.be.fulfilled;
 		});
 
