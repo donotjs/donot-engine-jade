@@ -33,22 +33,8 @@ class PugTransform extends Transform {
 				pretty: /\.min\.(html|html)$/i.test(filename)
 			});
 			resolved({
-				data: new Buffer(fn.body),
+				data: new Buffer(new Function('return function() {' + fn.body + ' return template;}')()()()),
 				files: [filename].concat(fn.dependencies)
-			});
-		});
-	}
-
-	needsRendering(options) {
-		return true;
-	}
-
-	render(compiledData, options) {
-		return new Promise((resolved, rejected) => {
-			var locals = (options || {}).ctx;
-			if (this.options.renderCallback) locals = this.options.renderCallback(locals);
-			resolved({
-				data: new Function('return function() {' + compiledData + ' return template;}')()()(locals)
 			});
 		});
 	}
