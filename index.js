@@ -25,7 +25,7 @@ class PugTransform extends Transform {
 		return filename.replace(/(?:\.min)?\.(html|htm)$/i, '.pug');
 	}
 
-	compile(filename, data) {
+	compile(filename, data, map, options) {
 		return new Promise((resolved, rejected) => {
 			var fn = pug.compileClientWithDependenciesTracked(data.toString(), {
 				filename: filename,
@@ -33,7 +33,7 @@ class PugTransform extends Transform {
 				pretty: /\.min\.(html|html)$/i.test(filename)
 			});
 			resolved({
-				data: new Buffer(new Function('return function() {' + fn.body + ' return template;}')()()()),
+				data: new Buffer(new Function('return function() {' + fn.body + ' return template;}')()()(options)),
 				files: [filename].concat(fn.dependencies)
 			});
 		});
